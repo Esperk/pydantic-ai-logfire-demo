@@ -65,6 +65,46 @@ UserInfo(name='John Doe', age=30, city='New York')
 ```
 (The actual output will be the Pydantic model representation)
 
+### Searching for People with `search_fourdigits_people.py`
+
+The `search_fourdigits_people.py` script showcases a more advanced agent capability: using web browsing to gather information. This script attempts to find employees working at "fourdigits.nl" and extract their names and job titles.
+
+**Key Features:**
+
+-   **`pydantic-ai` Agent:** Leverages the `Agent` class from `pydantic-ai`.
+-   **Web Search:** Integrates the `tavily_search_tool` for initial web searches.
+-   **Browser Automation:** Utilizes a Playwright MCP (Media Control Protocol) server (`@playwright/mcp@latest`) which allows the agent to directly interact with web pages to enrich information. The agent is instructed to "Use the browser to enrich the information."
+-   **Structured Output:** Aims to output a list of `Employee` objects, each containing a `name` and `job_title`.
+-   **Local Observability:** Configured with Logfire for local tracing (`send_to_logfire=False`).
+
+**Prerequisites:**
+
+-   Besides the general project setup, ensure you have a Tavily API key. Add it to your `.env` file:
+    ```dotenv
+    TAVILY_API_KEY="YOUR_TAVILY_API_KEY_HERE"
+    ```
+    The script will assert that this key is present.
+
+**Running the Script:**
+
+Navigate to the project root and run:
+
+```bash
+python src/pydantic_ai_demo/search_fourdigits_people.py
+```
+
+**Expected Output:**
+
+The script will print a list of dictionaries, where each dictionary represents an employee with their name and job title. For example:
+
+```
+{'name': 'Jane Doe', 'job_title': 'Software Engineer'}
+{'name': 'John Smith', 'job_title': 'Project Manager'}
+...
+```
+(The actual output will depend on the information found by the agent.)
+
+
 ## Project Structure
 
 -   `pyproject.toml`: Project metadata and dependencies, configured for `uv`.
