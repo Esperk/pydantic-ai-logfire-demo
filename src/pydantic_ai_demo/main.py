@@ -8,15 +8,12 @@ import typer
 from openai import OpenAI
 from pydantic import BaseModel, Field
 
-# Configure Logfire
-# Explicitly disabling sending data to Logfire cloud.
-# LOGFIRE_TOKEN is not used with this configuration.
-logfire.configure(send_to_logfire=True)
-logfire.instrument_pydantic() # Instrument Pydantic models for Logfire
-logfire.instrument_openai(OpenAI) # Instrument the OpenAI client
-logfire.instrument_httpx(capture_all=True) # Instrument HTTPX calls for deeper insights
 
-# Define the Pydantic model for the agent's response
+logfire.configure(send_to_logfire=True)
+logfire.instrument_pydantic()
+logfire.instrument_openai(OpenAI)
+logfire.instrument_httpx(capture_all=True)
+
 class UserInfo(BaseModel):
     name: str = Field(..., description="The name of the user.")
     age: int = Field(..., description="The age of the user.")
@@ -26,9 +23,6 @@ class UserInfo(BaseModel):
     def __str__(self):
         return f"UserInfo(name='{self.name}', age={self.age}, city='{self.city}', reasoning='{self.reasoning}')"
 
-# Patch the OpenAI client with instructor
-# This enables the client to return Pydantic models directly.
-# Ensure OPENAI_API_KEY is set in your environment.
 client = instructor.patch(OpenAI())
 
 app = typer.Typer(
@@ -52,7 +46,7 @@ def process_text(text: str = typer.Argument(..., help="The text to process for u
                     "content": f"Extract user information from the following text: {text}. Also, provide a brief reasoning for how you determined each piece of information.",
                 }
             ],
-        ) # type: ignore
+        )
         print(user_info)
         logfire.info(f"Successfully extracted user info: {user_info}")
     except Exception as e:
