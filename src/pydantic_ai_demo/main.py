@@ -18,7 +18,7 @@ class UserInfo(BaseModel):
     name: str = Field(..., description="The name of the user.")
     age: int = Field(..., description="The age of the user.")
     city: str = Field(..., description="The city where the user lives.")
-    reasoning: str = Field(..., description="The reasoning behind the extracted information.")
+    reasoning: str = Field(..., description="The reasoning per field behind the extracted information.")
 
     def __str__(self):
         return f"UserInfo(name='{self.name}', age={self.age}, city='{self.city}', reasoning='{self.reasoning}')"
